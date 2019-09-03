@@ -1,11 +1,11 @@
-import {Checkbox, Input} from 'antd';
+import {Checkbox} from 'antd';
 import {IRFormProps} from '../src';
 import {IFieldDeclaration, IFieldValueMap} from '../src/interface';
 import {InputValidateWrapper} from './wrapped-components';
 
 const componentMap = {
-    Checkbox,
-    Input: InputValidateWrapper,
+	Checkbox,
+	Input: InputValidateWrapper
 };
 const fieldDeclarations: IFieldDeclaration[] = [
     {
@@ -52,6 +52,7 @@ const fieldDeclarations: IFieldDeclaration[] = [
         },
         valueName: 'value',
     },
+  
 ];
 
 const valueMap: IFieldValueMap = {};

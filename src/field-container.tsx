@@ -11,19 +11,23 @@ export interface IFieldContainerProps {
 export interface IFieldComponentProps {
     componentName: string;
     fieldName: string;
-    callbackValuePath: string[] | ['value'];
+    callbackValuePath: string[];
     componentMap: IFieldComponentMap;
     link?: IFieldLink;
-    onChange: (value: any, fieldName: string, link: IFieldLink) => void;
+    onChange: (value: any, fieldName: string, link?: IFieldLink) => void;
 }
 
-const FieldComponent: FC<IFieldComponentProps> = (props: IFieldComponentProps): ReactElement => {
+interface IDataMap {
+    [name: string]: IDataMap;
+}
+
+const FieldComponent: FC<IFieldComponentProps> = (props: IFieldComponentProps): ReactElement | null => {
     const {componentName, fieldName, callbackValuePath, componentMap, onChange, link, ...restProperties} = props;
     const CComponent: ReactElement = componentMap[componentName];
 
-    const handleChange = useCallback((data: any) => {
+    const handleChange = useCallback((data: IDataMap) => {
         if (onChange) {
-            onChange(callbackValuePath.reduce((pv, cv): any => pv[cv], data), fieldName, link);
+            onChange(callbackValuePath.reduce((pv: IDataMap, cv: string): any => pv[cv], data), fieldName, link);
         }
     }, [fieldName, link, onChange, callbackValuePath]);
     if (CComponent == null) {

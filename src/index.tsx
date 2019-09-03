@@ -26,8 +26,9 @@ const DEFAULT_VALIDATE_RESULT_NAME = 'validateResult';
 const getLinkFieldDeclarations =
     (link: IFieldLink, fieldDeclarations: IFieldDeclaration[]): ILinkFieldDeclaration[] => {
         if (link && link.linkObjects) {
-            return link.linkObjects.map((linkObject) => {
+            return link.linkObjects.map((linkObject): ILinkFieldDeclaration => {
                 const fieldDeclaration = fieldDeclarations.find((field) => field.fieldName === linkObject.fieldName);
+                // @ts-ignore
                 return fieldDeclaration ? {
                     fieldDeclaration,
                     linkObject,
@@ -41,6 +42,7 @@ const getProcessLinkedValueToLinkPropertyValue = (val: any, link: IFieldLink, pr
         ? link.processLinkedValueToLinkPropertyValue(val, property, valueMap)
         : val;
 const useFieldDeclarationsAndValueMap = (defaultFieldDeclarations: IFieldDeclaration[], defaultValueMap: IFieldValueMap) => {
+
     const [valueMap, setValueMap] = useState(defaultValueMap);
     const [fieldDeclarations, setFieldDeclarations] = useState(defaultFieldDeclarations);
     const updateLinkObjectProperty = useCallback((newVal: any, fieldName: string, link: IFieldLink) => {
@@ -65,7 +67,6 @@ const useFieldDeclarationsAndValueMap = (defaultFieldDeclarations: IFieldDeclara
                                 draftValueMap[linkObject.fieldName] = result;
                             } else {
                                 if (typeof result.then === 'function') {
-                                    asyncOptsValueMap[fieldDeclaration.fieldName] = result;
                                     const properties = asyncOptsPropertyMap.get(fieldDeclaration.fieldName);
                                     asyncOptsPropertyMap
                                         .set(fieldDeclaration.fieldName,
@@ -95,7 +96,9 @@ const useFieldDeclarationsAndValueMap = (defaultFieldDeclarations: IFieldDeclara
                     po.result.then((value) => {
                         setFieldDeclarations(produce(nextFieldDeclarations, (draftFieldDeclarations) => {
                             const fDeclaration = draftFieldDeclarations.find((fd) => fd.fieldName === fName);
-                            fDeclaration.properties[po.property] = value;
+                            if (fDeclaration) {
+                                fDeclaration.properties[po.property] = value;
+                            }
                         }));
                     });
                 });
@@ -123,7 +126,7 @@ const useFieldDeclarationsAndValueMap = (defaultFieldDeclarations: IFieldDeclara
             });
         });
         setFieldDeclarations(nextFD);
-        return nextFD.every((fd) => fd.properties[fd.validateResultName].pass);
+        return nextFD.every((fd) => fd.validateResultName && fd.properties[fd.validateResultName].pass);
     };
     return {
         fieldDeclarations, resetAllProperties: reset, updateLinkObjectProperty, validate, valueMap,
