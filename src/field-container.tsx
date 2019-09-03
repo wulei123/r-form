@@ -45,7 +45,7 @@ const FieldContainer: FC<IFieldContainerProps> = (props: IFieldContainerProps): 
         if ( onChange ) {
             onChange(value, fieldName, link);
         }
-    }, [onChange, valueMap]);
+    }, [onChange]);
     return <Fragment>
         {
             fieldDeclarations.map(
