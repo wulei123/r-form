@@ -25,7 +25,8 @@ const fieldDeclarations: IFieldDeclaration[] = [
             },
         },
         properties: {
-            defaultChecked: true,
+            'data-testid': 'sex',
+            'defaultChecked': true,
         },
         valueName: 'value',
     },
@@ -34,7 +35,8 @@ const fieldDeclarations: IFieldDeclaration[] = [
         componentName: 'Input',
         fieldName: 'name',
         properties: {
-            defaultValue: 'Mike',
+            'data-testid': 'name',
+            'defaultValue': 'Mike',
         },
         valueName: 'value',
     },
